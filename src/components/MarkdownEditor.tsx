@@ -2,12 +2,17 @@ import './MarkdownEditor.css';
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import React, { useState, useEffect, useRef } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import { Cell } from '../state';
+import { useAction } from '../hooks';
 
+interface MarkdownEditorProps {
+    cell: Cell;
+}
 
-const MarkdownEditor: React.FC = () => {
+const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ cell }) => {
     const [editing, setEditing ] = useState(false);
-    const [text, setText] = useState('# Header');
     const editorRef = useRef<HTMLDivElement>(null);
+    const { updateCell } = useAction();
 
     useEffect(() => {
         const listener = (event: MouseEvent) => {
@@ -22,18 +27,17 @@ const MarkdownEditor: React.FC = () => {
         }
     }, [])
 
-
     if(editing){
         return (<div className="text-editor" ref={editorRef}>
-            <MDEditor 
-            value={text}
-            onChange={(value) => setText(value || "")}
+            <MDEditor
+              value={cell.content}
+              onChange={(value) => updateCell(cell.id, value || "# Edit markdown")}
             />
         </div>)
     }
     return (<div className="text-editor card" onClick={() => setEditing(true)}>
         <div className="card-content">
-           <MDEditor.Markdown source={text} />
+           <MDEditor.Markdown source={cell.content ? cell.content : "Edit markdown"} />
         </div>
     </div>)
 }

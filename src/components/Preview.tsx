@@ -16,7 +16,7 @@ const html = `
               eval(event.data)
             }catch (err) {
                 const root = document.getElementById('root')
-                root.innerHTML = '<div style="color: red; font-size: 20px; padding: 10px">' 
+                root.innerHTML = '<div style="color: red; font-size: 20px; padding: 10px">'
                                  +  err + '</div>'
             }
         }, false)
@@ -28,34 +28,36 @@ const html = `
 
 interface PreviewProps {
      code: string;
+     error: string;
 }
 
-const Preview: React.FC<PreviewProps> = ({ code })  => {
-    const iframeRef = useRef<any>();
+const Preview: React.FC<PreviewProps> = ({ code, error })  => {
+  const iframeRef = useRef<any>();
 
-    useEffect(() => {
-        iframeRef.current.srcdoc = html;
-        const time = setTimeout(() => {
-          iframeRef.current.contentWindow.postMessage(code, '*');
-        }
-        , 100)
-        return () => {
-          clearTimeout(time);
-        }
-    }, [code])
+  useEffect(() => {
+      iframeRef.current.srcdoc = html;
+      const time = setTimeout(() => {
+        iframeRef.current.contentWindow.postMessage(code || error , '*');
+      }
+      , 100)
+      return () => {
+        clearTimeout(time);
+      }
+  }, [code, error])
 
-    return (
-        <div className="preview_wrapper">
-            <iframe 
-                style={{ backgroundColor: 'transparent', width: '100%'  }}
-                ref={iframeRef} 
-                height="100%"
-                title="Code Preview" 
-                sandbox="allow-scripts" 
-                srcDoc={html}
-        />
-        </div>
-    )
+  return (
+      <div className="preview_wrapper">
+          <iframe
+              style={{ backgroundColor: 'transparent', width: '100%'  }}
+              ref={iframeRef}
+              height="100%"
+              title="Code Preview"
+              sandbox="allow-scripts"
+              srcDoc={html}
+      />
+      {/*{ error && <div className="preview-error" >{error}</div>}*/}
+      </div>
+  )
 }
 
 export { Preview }

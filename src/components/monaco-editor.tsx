@@ -7,7 +7,7 @@ import parser from 'prettier/parser-babel';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import {parse} from '@babel/parser';
 import traverse from '@babel/traverse';
-import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
+import Highlighter from 'monaco-jsx-highlighter';
 
 
 interface EditorProps {
@@ -25,7 +25,7 @@ export const Editor: React.FC<EditorProps> = ({ setCode, initialValue }) => {
             plugins: ['jsx']
         });
 
-        const monacoJSXHighlighter = new MonacoJSXHighlighter(
+        const monacoJSXHighlighter = new Highlighter(
             // @ts-ignore
             window.monaco,
             babelParser,
@@ -33,7 +33,7 @@ export const Editor: React.FC<EditorProps> = ({ setCode, initialValue }) => {
             editor
         );
 
-        monacoJSXHighlighter.highLightOnDidChangeModelContent(100); 
+        monacoJSXHighlighter.highLightOnDidChangeModelContent(100);
     }
 
     const onFormatClick = () => {
@@ -50,9 +50,16 @@ export const Editor: React.FC<EditorProps> = ({ setCode, initialValue }) => {
     }
 
     return <div className="editor_wrapper">
-            <button onClick={onFormatClick} className="button button-format is-primary">Format</button>
+            <button
+              onClick={onFormatClick}
+              className="button button-format is-primary"
+            >
+              Format
+            </button>
             <MonacoEditor
                 height="100%"
+                value={initialValue}
+                defaultValue={initialValue}
                 theme="vs-dark"
                 language="javascript"
                 options={{
@@ -66,8 +73,9 @@ export const Editor: React.FC<EditorProps> = ({ setCode, initialValue }) => {
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
                 }}
-                onChange={(code) => setCode(code || initialValue)}
-                value={initialValue}
+                onChange={(code) => {
+                    setCode(code || "")
+                }}
                 onMount={onDidMount}
             />
         </div>

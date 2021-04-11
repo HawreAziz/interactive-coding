@@ -1,6 +1,4 @@
 export * from './store'
 export * from './reducers'
-export * from './action-creators';
-export * from './reducers/cellReducer';
+export * as actionCreators from './action-creators';
 export * from './actions';
-export * from './actions/cell';

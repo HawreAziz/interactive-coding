@@ -14,14 +14,14 @@ const CellItem: React.FC<CellItemProps> = ({ cell }) => {
     if(cell.type === 'code'){
         child = <>
           <div className="cell-item-wrapper">
-            <ActionBar />
+            <ActionBar id={cell.id} />
           </div>
-          <CodeCell />
+          <CodeCell cell={cell} />
         </>
     }else{
         child = <>
-          <MarkdownEditor />
-          <ActionBar />
+          <MarkdownEditor cell={cell} />
+          <ActionBar  id={cell.id} />
         </>
     }
     return <div className="cell-item">{child}</div>

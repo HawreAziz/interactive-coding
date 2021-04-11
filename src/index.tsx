@@ -6,11 +6,11 @@ import CellList from './components/CellList';
 
 
 export const App = () => {
-    return <div className="app">
+    return <Provider store={store}>
+        <div className="app">
           <CellList />
         </div>
+      </Provider>
 }
 
-ReactDOM.render(<Provider store={store}>
-                  <App/>
-                </Provider>, document.querySelector('#root'));
+ReactDOM.render(<App/>, document.querySelector('#root'));
